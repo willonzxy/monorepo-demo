@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    // "strict": true,
+    "noEmit": true,
+    "noImplicitThis": false,
+    "importHelpers": true, // 是否引入npm包tslib中的辅助函数,__extends等
+    "experimentalDecorators": true,
+    "skipLibCheck": true,
+    // "noImplicitAny": false,
+    "esModuleInterop": true, // 允许 export = 导出，由import from 导入
+    "isolatedModules": true,
+    "allowSyntheticDefaultImports": true, //  用来指定允许从没有默认导出的模块中默认导入
+    // "forceConsistentCasingInFileNames": true, // 是否允许对同一个文件的不一致的引用
+    "sourceMap": true,
+    // "checkJs": true,
+    "allowJs": false, // 不允许编译JS
+    // "declarationMap": true,
+    "lib": ["dom", "esnext"],
+    "incremental": true, // 增量编译，只编译修改过的文件,这个时候会生成tsconfig.tsbuildinfo,下次编译的时候会进行对比只编译修改过的文件
+    "baseUrl": ".",
+    "paths": {
+      "@ui/*": ["packages/ui/*/src"],
+      "@shared/*": ["packages/shared/*/src"]
+    }
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "types/*.d.ts",
+    "packages/**/*/src"
+  ],
+  "exclude": ["node_modules", "dist", "**/*.js"]
+}

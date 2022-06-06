@@ -1,0 +1,21 @@
+{
+  "name": "@ui/tianti-login",
+  "version": "2.2.0",
+  "description": "手游登录插件，适用于100bt.com,172tt.com",
+  "main": "dist/tianti-login.cjs.js",
+  "module": "dist/tianti-login.esm.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "preinstall": "npx only-allow pnpm",
+    "build": "rollup -c ../../../rollup.config.js",
+    "prepublishOnly": "pnpm run build"
+  },
+  "buildOptions": {
+    "name": "TTLogin"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

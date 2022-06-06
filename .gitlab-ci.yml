@@ -1,0 +1,58 @@
+# CI文档地址：http://wiki.info/pages/viewpage.action?pageId=47414115
+include:
+  - project: "ywzc/ci-template"
+    ref: "2.0"
+    file: "template.yml"
+
+variables:
+  FTP_BASE: "/adminaola/production/snowball"
+  PACKAGE_NAME: "snowball"
+  NODE_VERSION: "v16.14.0"
+
+test-npm:
+  extends:
+    - .test
+    - .npm-build
+  script:
+    - source ${ENV}
+    - nvm install ${NODE_VERSION}
+    - npm install -g pnpm
+    - pnpm install
+    - mv ${NPM_PUBLISH_ACCESS_TOKEN} ~/.npmrc
+    - pnpm run release:test
+    - mv dist ${PACKAGE_NAME}
+  tags:
+    - ftp
+
+test-deploy:
+  extends:
+    - .test
+    - .deploy-scp
+  variables:
+    SERVER: 10.17.2.212
+    SITE_PATH: "/home/site/tianti-web/snowball/"
+
+production-npm:
+  extends:
+    - .master
+    - .npm-build
+  script:
+    - source ${ENV}
+    - nvm install ${NODE_VERSION}
+    - npm install -g pnpm
+    - pnpm install
+    - mv ${NPM_PUBLISH_ACCESS_TOKEN} ~/.npmrc
+    - pnpm run release:prod
+    - mkdir -p tianti-web/snowball/
+    - mv dist/* tianti-web/snowball/
+  artifacts:
+    name: tianti-web
+    paths:
+      - tianti-web
+  tags:
+    - ftp
+
+production-upload:
+  extends:
+    - .master
+    - .upload-zip
