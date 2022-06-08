@@ -22,9 +22,9 @@ test-npm:
     # - nrm add repo http://repo.bt/repository/npm-local/
     # - nrm use repo
     - echo "$NPM_PUBLISH_ACCESS_TOKEN"
-    - echo "$NPM_PUBLISH_ACCESS_TOKEN" > ~/.npmrc
-    - npm config set registry $NPM_PUBLISH_ACCESS_TOKEN
-    - npm config ls
+    - echo "$NPM_PUBLISH_ACCESS_TOKEN" >> .npmrc
+    - pnpm config set registry http://repo.bt/repository/npm-local/
+    - pnpm config ls
     - pnpm run release:prod
     - mkdir -p tianti-web/resource/snowball/
     - mv dist/* tianti-web/resource/snowball/
