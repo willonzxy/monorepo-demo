@@ -19,7 +19,7 @@ test-npm:
     - npm install -g pnpm
     - npm install -g nrm
     - pnpm install
-    - nrm add repo $TEST_REPO
+    - nrm add repo $REPO_BT
     - nrm use repo
     - echo "$NPM_PUBLISH_ACCESS_TOKEN" >> .npmrc
     - pnpm run release:prod
@@ -36,7 +36,7 @@ test-deploy:
     SERVER: 10.17.2.212
     SITE_PATH: "/home/site/tianti-web/"
 
-npm-publish:
+production-upload-ftp:
   extends:
     - .test
     - .upload-zip
