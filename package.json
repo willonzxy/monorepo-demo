@@ -7,7 +7,7 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "release:test": "cross-env NODE_ENV=test pnpm publish -r --no-git-checks",
-    "release:prod": "cross-env NODE_ENV=prod pnpm publish -r --no-git-checks"
+    "release:prod": "cross-env NODE_ENV=prod pnpm publish -r --no-git-checks --registry http://repo.bt/repository/npm-local/"
   },
   "bin": {
     "notify": "./script/notify.js"
