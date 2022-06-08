@@ -29,10 +29,14 @@ test-deploy:
   extends:
     - .test
     - .deploy-scp
-    - .upload-zip
   variables:
     SERVER: 10.17.2.212
     SITE_PATH: "/home/site/tianti-web/"
+
+npm-publish:
+  extends:
+    - .test
+    - .upload-zip
 # production-npm:
 #   extends:
 #     - .master
