@@ -17,8 +17,11 @@ test-npm:
     - source ${ENV}
     - nvm install ${NODE_VERSION}
     - npm install -g pnpm
+    # - npm install -g nrm
     - pnpm install
-    - mv ${NPM_PUBLISH_ACCESS_TOKEN} ~/.npmrc
+    # - nrm add repo http://repo.bt/repository/npm-local/
+    # - nrm use repo
+    - echo "$NPM_PUBLISH_ACCESS_TOKEN" > ~/.npmrc
     - pnpm run release:prod
     - mkdir -p tianti-web/resource/snowball/
     - mv dist/* tianti-web/resource/snowball/

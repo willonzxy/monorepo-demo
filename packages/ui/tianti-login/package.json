@@ -1,6 +1,6 @@
 {
   "name": "@ui/tianti-login",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "手游登录插件，适用于100bt.com,172tt.com",
   "main": "dist/tianti-login.cjs.js",
   "module": "dist/tianti-login.esm.js",
