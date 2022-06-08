@@ -21,6 +21,7 @@ test-npm:
     - pnpm install
     # - nrm add repo http://repo.bt/repository/npm-local/
     # - nrm use repo
+    - echo "$NPM_PUBLISH_ACCESS_TOKEN"
     - echo "$NPM_PUBLISH_ACCESS_TOKEN" > ~/.npmrc
     - pnpm run release:prod
     - mkdir -p tianti-web/resource/snowball/
