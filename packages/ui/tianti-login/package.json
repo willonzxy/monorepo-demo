@@ -8,15 +8,16 @@
     "dist"
   ],
   "scripts": {
-    "preinstall": "npx only-allow pnpm",
+    "notify": "node ../../../script/notify.js",
     "dev": "cross-env NODE_ENV=dev rollup -c ../../../rollup.config.js -w",
     "build": "rollup -c ../../../rollup.config.js",
-    "prepublishOnly": "pnpm run build"
+    "prepublishOnly": "pnpm run build",
+    "postpublish": "pnpm run notify"
   },
   "buildOptions": {
     "name": "TTLogin"
   },
   "keywords": [],
-  "author": "",
+  "author": "支撑老铁",
   "license": "ISC"
 }

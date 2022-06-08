@@ -6,7 +6,7 @@ include:
 
 variables:
   FTP_BASE: "/adminaola/production/snowball"
-  PACKAGE_NAME: "snowball"
+  PACKAGE_NAME: "tianti-web"
   NODE_VERSION: "v16.14.0"
 
 test-npm:
@@ -19,8 +19,9 @@ test-npm:
     - npm install -g pnpm
     - pnpm install
     - mv ${NPM_PUBLISH_ACCESS_TOKEN} ~/.npmrc
-    - pnpm run release:test
-    - mv dist ${PACKAGE_NAME}
+    - pnpm run release:prod
+    - mkdir -p tianti-web/resource/snowball/
+    - mv dist/* tianti-web/resource/snowball/
   tags:
     - ftp
 
@@ -28,31 +29,31 @@ test-deploy:
   extends:
     - .test
     - .deploy-scp
+    - .upload-zip
   variables:
     SERVER: 10.17.2.212
-    SITE_PATH: "/home/site/tianti-web/resource/snowball/"
+    SITE_PATH: "/home/site/tianti-web/"
+# production-npm:
+#   extends:
+#     - .master
+#     - .npm-build
+#   script:
+#     - source ${ENV}
+#     - nvm install ${NODE_VERSION}
+#     - npm install -g pnpm
+#     - pnpm install
+#     - mv ${NPM_PUBLISH_ACCESS_TOKEN} ~/.npmrc
+#     - pnpm run release:prod
+#     - mkdir -p tianti-web/resource/snowball/
+#     - mv dist/* tianti-web/resource/snowball/
+#   artifacts:
+#     name: tianti-web
+#     paths:
+#       - tianti-web
+#   tags:
+#     - ftp
 
-production-npm:
-  extends:
-    - .master
-    - .npm-build
-  script:
-    - source ${ENV}
-    - nvm install ${NODE_VERSION}
-    - npm install -g pnpm
-    - pnpm install
-    - mv ${NPM_PUBLISH_ACCESS_TOKEN} ~/.npmrc
-    - pnpm run release:prod
-    - mkdir -p tianti-web/resource/snowball/
-    - mv dist/* tianti-web/resource/snowball/
-  artifacts:
-    name: tianti-web
-    paths:
-      - tianti-web
-  tags:
-    - ftp
-
-production-upload:
-  extends:
-    - .master
-    - .upload-zip
+# production-upload:
+#   extends:
+#     - .test
+#     - .upload-zip
