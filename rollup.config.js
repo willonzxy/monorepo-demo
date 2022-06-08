@@ -14,6 +14,8 @@ import postcssURL from "postcss-url"; // 处理css里的静态资源，重命名
 import path from "path";
 
 const inDev = process.env.NODE_ENV && process.env.NODE_ENV.includes("dev");
+const inTest = process.env.NODE_ENV && process.env.NODE_ENV.includes("test");
+const inProd = process.env.NODE_ENV && process.env.NODE_ENV.includes("prod");
 
 const pkgPath = process.cwd();
 
@@ -175,18 +177,15 @@ const IIFETask = outputDir => {
 };
 
 // 正式环境构建 - npm内的dist es,cjs产物
-if (process.env.NODE_ENV && process.env.NODE_ENV.includes("prod")) {
+if (inProd) {
   multiBuildTask.push(ESAndCJSTask(pkgOutputDir));
 }
 // 本地环境、正式环境构建 - npm内的dist iife格式产物
-if (
-  (process.env.NODE_ENV && process.env.NODE_ENV.includes("prod")) ||
-  process.env.NODE_ENV.includes("dev")
-) {
+if (inProd || inDev) {
   multiBuildTask.push(IIFETask(pkgOutputDir));
 }
 // 测试环境,正式环境 - 全局dist iife格式产物
-if (process.env.NODE_ENV && process.env.NODE_ENV.includes("test")) {
+if (inTest) {
   multiBuildTask.push(IIFETask(globalDistOutputDir));
 }
 

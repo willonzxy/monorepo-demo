@@ -30,7 +30,7 @@ test-deploy:
     - .deploy-scp
   variables:
     SERVER: 10.17.2.212
-    SITE_PATH: "/home/site/tianti-web/snowball/"
+    SITE_PATH: "/home/site/tianti-web/resource/snowball/"
 
 production-npm:
   extends:
@@ -43,8 +43,8 @@ production-npm:
     - pnpm install
     - mv ${NPM_PUBLISH_ACCESS_TOKEN} ~/.npmrc
     - pnpm run release:prod
-    - mkdir -p tianti-web/snowball/
-    - mv dist/* tianti-web/snowball/
+    - mkdir -p tianti-web/resource/snowball/
+    - mv dist/* tianti-web/resource/snowball/
   artifacts:
     name: tianti-web
     paths:
