@@ -1,20 +1,7 @@
 import "core-js";
 import { TTLOGIN, TTLOGIN_OPTIONS } from "../types/tianti-login";
 import { BASE_CONFIG } from "./config";
-import {
-  _Utils,
-  _Ajax,
-  _Toast,
-  _Cookie,
-  _CountDown,
-  _BindEvents,
-  isMobile
-} from "./util";
-import { renderStyle } from "./style";
-// import bgpng from "./assets/m/img/bg.png";
-// console.log(bgpng);
-// import { test } from "@shared/pkg";
-// console.log(test);
+import { _BindEvents, renderStyle } from "./util";
 
 const $ = window.$;
 // jquery未引入抛异常
@@ -97,8 +84,6 @@ function _createLoginDom(config: TTLOGIN_OPTIONS) {
   const toast = `<div class="${styles._TTLogin_toast}"></div>`;
   $("body").append(htmls);
   $("body").append(toast);
-
-  new Promise(resolve => resolve(1)).then(res => console.log(res));
 }
 
 export default TTLogin;

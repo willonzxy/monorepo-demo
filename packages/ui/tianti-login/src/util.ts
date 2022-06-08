@@ -1,6 +1,11 @@
 import type { TTLOGIN_OPTIONS } from "../types/tianti-login";
-import { renderStyle } from "./style";
-const $ = window.$;
+
+import PCStyle from "./style/ttLogin.css";
+import MStyle from "./style/ttLogin.m.css";
+
+export const renderStyle = (config: undefined | "m" | "pc") => {
+  return !config && isMobile() ? MStyle : config === "m" ? MStyle : PCStyle;
+};
 
 export const isMobile = function () {
   return /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i.test(
@@ -8,6 +13,7 @@ export const isMobile = function () {
   );
 };
 
+const $ = window.$;
 // export const loadStyle = (type?: "m" | "pc") => {
 //   type = type || (isMobile() ? "m" : "pc");
 //   const stylesheet = {
@@ -25,11 +31,10 @@ export const isMobile = function () {
 
 export const _Utils = {
   //防抖，给可能触发连续点击的操作加
-  debounce: function (fn: Function, wait: number) {
-    var timer = null;
-    return function () {
-      var context = this;
-      var args = arguments;
+  debounce: function (fn: any, wait: number) {
+    let timer = null;
+    return function (...args) {
+      const context = this;
       if (timer) {
         clearTimeout(timer);
         timer = null;
@@ -67,7 +72,7 @@ _Ajax.prototype = {
     success?: (res: any) => void,
     error?: (res: any) => void
   ) {
-    var aipMap = this.inBT ? this.BTapi : this.api;
+    const aipMap = this.inBT ? this.BTapi : this.api;
     const that = this;
     $.ajax({
       url: this.server + aipMap[api],
@@ -106,7 +111,7 @@ _Toast.prototype = {
     }
     if (msg) {
       const me = this;
-      var t = time || this.timeoutTime;
+      const t = time || this.timeoutTime;
       this.$toast.text(msg).fadeIn(me.fadeTime);
       this.timeout = setTimeout(function () {
         me.$toast.fadeOut(me.fadeTime);
@@ -116,15 +121,14 @@ _Toast.prototype = {
 };
 
 /**
- * 内部类
+ * 单体
  * 设置cookie
  */
-export const _Cookie = function () {};
-_Cookie.prototype = {
+export const _Cookie = {
   // 存cookie
   setCookie: function (name, value) {
-    var Days = 30;
-    var exp = new Date();
+    const Days = 30;
+    const exp = new Date();
     exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
     document.cookie =
       name + "=" + escape(value) + ";expires=" + exp.toUTCString();
@@ -132,8 +136,8 @@ _Cookie.prototype = {
 
   //读取cookies
   getCookie: function (name) {
-    var arr,
-      reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+    let arr = [];
+    const reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
 
     if ((arr = document.cookie.match(reg))) return unescape(arr[2]);
     else return null;
@@ -141,9 +145,9 @@ _Cookie.prototype = {
 
   //delCookie
   delCookie: function (name) {
-    var exp = new Date();
+    const exp = new Date();
     exp.setTime(exp.getTime() - 1);
-    var cval = this.getCookie(name);
+    const cval = this.getCookie(name);
     if (cval != null)
       document.cookie = name + "=" + cval + ";expires=" + exp.toUTCString();
   }
@@ -208,7 +212,7 @@ export const _BindEvents = function (config: TTLOGIN_OPTIONS) {
   this._countDown = new _CountDown(this.$btn_getCaptcha);
   this._toast = new _Toast($("." + styles._TTLogin_toast), config.fadeTime);
   this._ajax = new _Ajax(this._toast.show, config.requestErrTips);
-  this._cookie = new _Cookie();
+  this._cookie = _Cookie;
   this.init();
   this.subscribe = {
     // 回调事件调度器
@@ -236,11 +240,10 @@ _BindEvents.prototype = {
   },
   //数字输入校验器
   inputValidate: function (e) {
-    var me = this;
-    var $target = $(e.target);
-    var val = $target.val() as string;
+    const $target = $(e.target);
+    let val = $target.val() as string;
     if (!/^\d*$/.test(val)) {
-      val = me.backInput(val);
+      val = this.backInput(val);
       $target.val(val);
     }
   },
@@ -301,14 +304,14 @@ _BindEvents.prototype = {
   //获取验证码
   getCaptchaHandler: function () {
     const config = this.config;
-    var phone = this.$phone.val();
+    const phone = this.$phone.val();
     if (!phone || !config.phoneReg.test(phone)) {
       this.errPhone();
       // _events._toast.show(_obj._config.phoneErrTip);
       return false;
     }
 
-    var that = this;
+    const that = this;
     this._ajax.fetch(
       "getCaptcha",
       {
@@ -345,10 +348,10 @@ _BindEvents.prototype = {
       return false;
     }
 
-    var me = this;
-    var phone = this.$phone.val();
-    var captcha = this.$captcha.val();
-    var isChecked = this.$btn_checkBox.is(":checked");
+    const me = this;
+    const phone = this.$phone.val();
+    const captcha = this.$captcha.val();
+    const isChecked = this.$btn_checkBox.is(":checked");
 
     if (!phone || !config.phoneReg.test(phone)) {
       this.errPhone();

@@ -6,4 +6,4 @@ export const foo = (): Promise<number> => {
 
 export const goo = [1, ...[1]];
 
-export const test: string = "paths";
+export const test = "paths";

@@ -9,6 +9,7 @@
   ],
   "scripts": {
     "preinstall": "npx only-allow pnpm",
+    "dev": "cross-env NODE_ENV=dev rollup -c ../../../rollup.config.js -w",
     "build": "rollup -c ../../../rollup.config.js",
     "prepublishOnly": "pnpm run build"
   },

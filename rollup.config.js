@@ -1,5 +1,7 @@
 import babel from "@rollup/plugin-babel";
 import resolve from "@rollup/plugin-node-resolve"; // 告诉 Rollup 如何查找外部模块
+// import dev from "rollup-plugin-dev";
+// import serve from "rollup-plugin-serve";
 // import typescript from "@rollup/plugin-typescript";
 // import buble from "@rollup/plugin-buble";
 import { DEFAULT_EXTENSIONS } from "@babel/core";
@@ -11,9 +13,12 @@ import url from "@rollup/plugin-url";
 import postcssURL from "postcss-url"; // 处理css里的静态资源，重命名及其路径问题
 import path from "path";
 
+const inDev = process.env.NODE_ENV && process.env.NODE_ENV.includes("dev");
+
 const pkgPath = process.cwd();
+
 const pkg = require(resolvePkgPath("package.json"));
-console.log(pkg);
+
 const pkgBuildOptions = pkg.buildOptions;
 // @ui/pkg => pkg
 const pkgName = /.+\/(.+)/.exec(pkg.name)[1];
@@ -86,7 +91,9 @@ const sharedPlugins = ({ outputDir, tsCompilerOptions = {} }) => [
           url: asset => {
             return asset.url.replace(
               /(.+?)img/,
-              `//resource.172tt.com/core/${globalScopePath}/${pkgName}-${pkg.version}/img`
+              inDev
+                ? "./dist/img"
+                : `//resource.172tt.com/core/${globalScopePath}/${pkgName}-${pkg.version}/img`
             );
           },
           multi: true
@@ -98,7 +105,9 @@ const sharedPlugins = ({ outputDir, tsCompilerOptions = {} }) => [
     // 4kb
     limit: 4 * 1024,
     fileName: "[dirname][name]_[hash][extname]",
-    publicPath: `//resource.172tt.com/core/${globalScopePath}/${pkgName}-${pkg.version}/`
+    publicPath: inDev
+      ? "./dist/img"
+      : `//resource.172tt.com/core/${globalScopePath}/${pkgName}-${pkg.version}/`
   })
 ];
 
@@ -126,19 +135,11 @@ const ESAndCJSTask = outputDir => ({
   ...sharedConfig
 });
 
-const IIFETask = outputDir => ({
-  input: pkgCompilerEntry,
-  output: [
-    {
-      format: "iife",
-      file: path.join(outputDir, `${pkgName}.global.js`),
-      name: pkgBuildOptions.name,
-      ...sharedOutputConfig
-    }
-  ],
-  plugins: sharedPlugins({
+const IIFETask = outputDir => {
+  let plugins = sharedPlugins({
     outputDir
-  }).concat([
+  });
+  plugins.push(
     babel({
       // exclude: "node_modules/**",
       configFile: absoluteFilePath("babel.config.js"),
@@ -146,18 +147,47 @@ const IIFETask = outputDir => ({
       // runtimeHelpers: true,
       extensions: [...DEFAULT_EXTENSIONS, ".ts"]
     })
-  ]),
-  ...sharedConfig
-});
+  );
+  // 开发环境开启本地服务监听
+  if (inDev) {
+    console.log("请自行打开 live Serve 开启本地服务监听");
+    // plugins.push(
+    //   serve({
+    //     open: true, // 自动打开页面
+    //     port: 8000,
+    //     openPage: resolvePkgPath("index.html") // 打开的页面
+    //   })
+    // );
+  }
+  return {
+    input: pkgCompilerEntry,
+    output: [
+      {
+        format: "iife",
+        file: path.join(outputDir, `${pkgName}.global.js`),
+        name: pkgBuildOptions.name,
+        ...sharedOutputConfig
+      }
+    ],
+    plugins,
+    ...sharedConfig
+  };
+};
 
-// 用于正式的npm包发布构建
-if (process.env.NODE_ENV.includes("prod")) {
+// 正式环境构建 - npm内的dist es,cjs产物
+if (process.env.NODE_ENV && process.env.NODE_ENV.includes("prod")) {
   multiBuildTask.push(ESAndCJSTask(pkgOutputDir));
+}
+// 本地环境、正式环境构建 - npm内的dist iife格式产物
+if (
+  (process.env.NODE_ENV && process.env.NODE_ENV.includes("prod")) ||
+  process.env.NODE_ENV.includes("dev")
+) {
   multiBuildTask.push(IIFETask(pkgOutputDir));
 }
-
-// 用户纯静态文件构建
-// multiBuildTask.push(ESAndCJSTask(globalDistOutputDir));
-multiBuildTask.push(IIFETask(globalDistOutputDir));
+// 测试环境,正式环境 - 全局dist iife格式产物
+if (process.env.NODE_ENV && process.env.NODE_ENV.includes("test")) {
+  multiBuildTask.push(IIFETask(globalDistOutputDir));
+}
 
 export default multiBuildTask;

@@ -52,5 +52,5 @@ export interface TTLOGIN {
   /** 删除某个cookie */
   delCookie(name: string): void;
   /** 注册监听事件 */
-  on(topic: "succLogined" | "closeDialog", cb?: Function): void;
+  on(topic: "succLogined" | "closeDialog", cb?: (...args: any[]) => void): void;
 }
