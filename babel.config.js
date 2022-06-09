@@ -1,15 +1,9 @@
-const path = require("path");
 module.exports = {
-  presets: [
-    // ["@babel/preset-typescript"],
+  presets: [["@babel/preset-env"]],
+  plugins: [
     [
-      "@babel/preset-env",
-      {
-        // 可以entry或者usage
-        useBuiltIns: "usage",
-        corejs: 3
-      }
+      "@babel/plugin-transform-runtime",
+      { corejs: { version: 3, proposals: true } }
     ]
-  ],
-  plugins: [["@babel/plugin-transform-runtime"]]
+  ]
 };
