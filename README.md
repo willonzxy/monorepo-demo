@@ -67,7 +67,7 @@ packages 分包
         npm install <pkg-name>
         npm install @ui/tianti-login
         ```
-  - 方式 2：npm link
+  - 方式 2：全局 link 方式
 
 - 在本仓库内相互引用
   - 打开项目根目录
