@@ -5,12 +5,13 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rollup -c ../../../rollup.config.js",
-    "prepublishOnly": "pnpm run build"
+    "build": "rollup -c ../../../rollup.config.js"
   },
   "buildOptions": {
-    "name": "Test"
+    "name": "pkg",
+    "formats": [
+      "iife"
+    ]
   },
   "keywords": [],
   "author": "",
