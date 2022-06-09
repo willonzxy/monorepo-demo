@@ -1,1 +1,2 @@
-基于 pnpm workspace 搭建的 monorepo 仓库，用于存放小而精的组件资源。
+## 问题
+不知道为啥，pkg包构建出来的dist/pkg.global.js居然运行失败了,是哪里的配置出错了呢？
