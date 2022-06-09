@@ -38,21 +38,12 @@ packages 分包
     - buildOptions.name （必填）对应着组件在浏览器环境挂载到全局的变量名
 - 包编译入口必须为 src/index.ts
 
-## 测试环境增量部署
+## 增量部署
 
-- 推送 release 分支，但此操作组件不会以 npm 包的形式发布到源，
-  仅会构建出组件的浏览器执行版本，然后部署到 10.17.2.212 机器上
-- 引用 如 tianti-login v2.2.0 版本
-
-  ```html
-  <script src="//resource.172tt.com/snowball/ui/tianti-login-2.2.0/tianti-login.global.js"></script>
-  ```
-
-## 正式环境增量发版及 npm 包发布
-
-- 提交 master 分支
-- 此操作会将组件以 npm 包的形式发布到源
-- 拿到 ftp，到 op 走 tianti-events 前端发版流程
+- 推送 release 分支，
+- 此操作会将组件以 npm 包的形式发布到源，
+- 也会构建出组件的浏览器执行版本，然后部署到 10.17.2.212 机器上
+- 同时也可以拿到ftp发版链接，之后线上发版到 op 走 tianti-events 前端发版流程
 
 ## 资源引用
 
