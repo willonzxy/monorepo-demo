@@ -24,7 +24,7 @@ const pkg = require(resolvePkgPath("package.json"));
 const pkgBuildOptions = pkg.buildOptions;
 // @ui/pkg => pkg
 const pkgName = /.+\/(.+)/.exec(pkg.name)[1];
-const pkgCompilerEntry = resolvePkgPath("src/index.ts");
+const pkgCompilerEntry = resolvePkgPath("src/index.js");
 const pkgOutputDir = resolvePkgPath("dist");
 // @ui/pkg => ui
 const globalScopePath = /@(\w+?)\//.exec(pkg.name)[1];
@@ -56,56 +56,59 @@ const sharedOutputConfig = {
 
 const sharedPlugins = ({ outputDir, tsCompilerOptions = {} }) => [
   resolve({
-    moduleDirectories: ["node_modules"]
+    moduleDirectories: ["node_modules"],
+    jsnext: true,
+    main: true,
+    browser: true
   }),
-  commonjs(),
-  typescript({
-    useTsconfigDeclarationDir: false,
-    tsconfig: absoluteFilePath("tsconfig.json"),
-    tsconfigOverride: {
-      compilerOptions: tsCompilerOptions
-    }
-  }),
-  postcss({
-    modules: true,
-    // extract: true,
-    plugins: [
-      postcssURL([
-        {
-          url: "inline",
-          fallback: "copy",
-          // 4kb
-          maxSize: 4,
-          assetsPath: path.join(outputDir, "img"),
-          useHash: true,
-          hashOptions: {
-            // 末尾追加4hash值
-            shrink: 4,
-            append: true
-          }
-        },
-        {
-          url: asset => {
-            return asset.url.replace(
-              /(.+?)img/,
-              inDev
-                ? "./dist/img"
-                : `//resource.xxx.com/core/${globalScopePath}/${pkgName}-${pkg.version}/img`
-            );
-          },
-          multi: true
-        }
-      ])
-    ]
-  }),
-  url({
-    // 4kb
-    limit: 4 * 1024,
-    fileName: "[dirname][name]_[hash][extname]",
-    publicPath: inDev
-      ? "./dist/img"
-      : `//resource.xxx.com/core/${globalScopePath}/${pkgName}-${pkg.version}/`
-  })
+  commonjs()
+  // typescript({
+  //   useTsconfigDeclarationDir: false,
+  //   tsconfig: absoluteFilePath("tsconfig.json"),
+  //   tsconfigOverride: {
+  //     compilerOptions: tsCompilerOptions
+  //   }
+  // }),
+  // postcss({
+  //   modules: true,
+  //   // extract: true,
+  //   plugins: [
+  //     postcssURL([
+  //       {
+  //         url: "inline",
+  //         fallback: "copy",
+  //         // 4kb
+  //         maxSize: 4,
+  //         assetsPath: path.join(outputDir, "img"),
+  //         useHash: true,
+  //         hashOptions: {
+  //           // 末尾追加4hash值
+  //           shrink: 4,
+  //           append: true
+  //         }
+  //       },
+  //       {
+  //         url: asset => {
+  //           return asset.url.replace(
+  //             /(.+?)img/,
+  //             inDev
+  //               ? "./dist/img"
+  //               : `//resource.xxx.com/core/${globalScopePath}/${pkgName}-${pkg.version}/img`
+  //           );
+  //         },
+  //         multi: true
+  //       }
+  //     ])
+  //   ]
+  // }),
+  // url({
+  //   // 4kb
+  //   limit: 4 * 1024,
+  //   fileName: "[dirname][name]_[hash][extname]",
+  //   publicPath: inDev
+  //     ? "./dist/img"
+  //     : `//resource.xxx.com/core/${globalScopePath}/${pkgName}-${pkg.version}/`
+  // })
 ];
 
 const ESAndCJSTask = outputDir => ({
@@ -140,9 +143,9 @@ const IIFETask = outputDir => {
     babel({
       exclude: "node_modules/**",
       configFile: absoluteFilePath("babel.config.js"),
-      babelHelpers: "runtime",
-      // runtimeHelpers: true,
-      extensions: [...DEFAULT_EXTENSIONS, ".ts"]
+      babelHelpers: "runtime"
+      // // runtimeHelpers: true,
+      // extensions: [...DEFAULT_EXTENSIONS, ".ts"]
     })
   );
   // 开发环境开启本地服务监听
@@ -164,8 +167,8 @@ const IIFETask = outputDir => {
   };
 };
 
-multiBuildTask.push(ESAndCJSTask(pkgOutputDir));
-multiBuildTask.push(IIFETask(globalDistOutputDir));
+// multiBuildTask.push(ESAndCJSTask(pkgOutputDir));
+// multiBuildTask.push(IIFETask(globalDistOutputDir));
 
 multiBuildTask.push(IIFETask(pkgOutputDir));
 

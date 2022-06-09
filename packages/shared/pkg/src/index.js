@@ -1,4 +1,4 @@
-export const foo = (): Promise<number> => {
+export const foo = () => {
   return new Promise(res => res(1));
 };
 
