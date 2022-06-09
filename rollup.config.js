@@ -15,7 +15,7 @@ import path from "path";
 
 const inDev = process.env.NODE_ENV && process.env.NODE_ENV.includes("dev");
 // const inTest = process.env.NODE_ENV && process.env.NODE_ENV.includes("test");
-const inProd = process.env.NODE_ENV && process.env.NODE_ENV.includes("prod");
+// const inProd = process.env.NODE_ENV && process.env.NODE_ENV.includes("prod");
 
 const pkgPath = process.cwd();
 
@@ -63,11 +63,6 @@ const sharedPlugins = ({ outputDir, tsCompilerOptions = {} }) => [
     useTsconfigDeclarationDir: false,
     tsconfig: absoluteFilePath("tsconfig.json"),
     tsconfigOverride: {
-      // compilerOptions: {
-      //   declaration,
-      //   declarationDir: path.join(outputDir, "types")
-      // },
-      // include: [resolvePkgPath()],
       compilerOptions: tsCompilerOptions
     }
   }),
@@ -95,7 +90,7 @@ const sharedPlugins = ({ outputDir, tsCompilerOptions = {} }) => [
               /(.+?)img/,
               inDev
                 ? "./dist/img"
-                : `//resource.172tt.com/core/${globalScopePath}/${pkgName}-${pkg.version}/img`
+                : `//resource.xxx.com/core/${globalScopePath}/${pkgName}-${pkg.version}/img`
             );
           },
           multi: true
@@ -109,7 +104,7 @@ const sharedPlugins = ({ outputDir, tsCompilerOptions = {} }) => [
     fileName: "[dirname][name]_[hash][extname]",
     publicPath: inDev
       ? "./dist/img"
-      : `//resource.172tt.com/core/${globalScopePath}/${pkgName}-${pkg.version}/`
+      : `//resource.xxx.com/core/${globalScopePath}/${pkgName}-${pkg.version}/`
   })
 ];
 
@@ -143,7 +138,7 @@ const IIFETask = outputDir => {
   });
   plugins.push(
     babel({
-      // exclude: "node_modules/**",
+      exclude: "node_modules/**",
       configFile: absoluteFilePath("babel.config.js"),
       babelHelpers: "runtime",
       // runtimeHelpers: true,
@@ -153,13 +148,6 @@ const IIFETask = outputDir => {
   // 开发环境开启本地服务监听
   if (inDev) {
     console.log("请自行打开 live Serve 开启本地服务监听");
-    // plugins.push(
-    //   serve({
-    //     open: true, // 自动打开页面
-    //     port: 8000,
-    //     openPage: resolvePkgPath("index.html") // 打开的页面
-    //   })
-    // );
   }
   return {
     input: pkgCompilerEntry,
@@ -176,17 +164,9 @@ const IIFETask = outputDir => {
   };
 };
 
-// 正式环境构建 - npm内的dist es,cjs产物,全局dist iife格式产物
-if (inProd) {
-  multiBuildTask.push(ESAndCJSTask(pkgOutputDir));
-  multiBuildTask.push(IIFETask(globalDistOutputDir));
-}
-// 本地环境、正式环境构建 - npm内的dist iife格式产物
-if (inProd || inDev) {
-  multiBuildTask.push(IIFETask(pkgOutputDir));
-}
-// // 测试环境,正式环境 - 全局dist iife格式产物
-// if (inTest) {
-// }
+multiBuildTask.push(ESAndCJSTask(pkgOutputDir));
+multiBuildTask.push(IIFETask(globalDistOutputDir));
+
+multiBuildTask.push(IIFETask(pkgOutputDir));
 
 export default multiBuildTask;

@@ -84,9 +84,6 @@ importers:
   packages/shared/pkg:
     specifiers: {}
 
-  packages/ui/tianti-login:
-    specifiers: {}
-
 packages:
 
   /@ampproject/remapping/2.2.0:

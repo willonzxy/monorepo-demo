@@ -6,21 +6,10 @@ module.exports = {
       "@babel/preset-env",
       {
         // 可以entry或者usage
-        useBuiltIns: "entry",
+        useBuiltIns: "usage",
         corejs: 3
       }
     ]
   ],
-  plugins: [
-    [
-      "@babel/plugin-transform-runtime",
-      {
-        corejs: false,
-        version: require("@babel/runtime-corejs3/package.json").version,
-        absoluteRuntime: path.dirname(
-          require.resolve("@babel/runtime-corejs3/package.json")
-        )
-      }
-    ]
-  ]
+  plugins: [["@babel/plugin-transform-runtime"]]
 };

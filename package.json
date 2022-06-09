@@ -6,10 +6,7 @@
   "private": true,
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "release:prod": "cross-env NODE_ENV=prod pnpm publish -r --no-git-checks"
-  },
-  "bin": {
-    "notify": "./script/notify.js"
+    "release:prod": "pnpm publish -r --no-git-checks"
   },
   "keywords": [],
   "author": "",
