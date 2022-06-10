@@ -1,21 +1,21 @@
-module.exports = {
-  presets: [
+{
+  "presets": [
     [
       "@babel/preset-env",
       {
-        modules: false
+        "modules": false
       }
     ]
   ],
-  plugins: [
+  "plugins": [
     [
       "@babel/plugin-transform-runtime",
       {
-        corejs: {
-          version: 3,
-          proposals: true
+        "corejs": {
+          "version": 3,
+          "proposals": true
         }
       }
     ]
   ]
-};
+}

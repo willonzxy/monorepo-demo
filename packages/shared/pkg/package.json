@@ -5,7 +5,7 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "build": "rollup -c ../../../rollup.config.js"
+    "build": "rollup --config ../../../rollup.config.js"
   },
   "buildOptions": {
     "name": "pkg",

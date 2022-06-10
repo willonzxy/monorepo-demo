@@ -26,7 +26,7 @@
   "vetur.format.defaultFormatter.js": "none",
   "typescript.updateImportsOnFileMove.enabled": "always",
   "javascript.updateImportsOnFileMove.enabled": "always",
-  "javascript.validate.enable": false,
+  "javascript.validate.enable": true,
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true
 }

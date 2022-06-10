@@ -1,7 +1,7 @@
-export const foo = () => {
+const foo = () => {
   return new Promise(res => res(1));
 };
 
-export const goo = [1, ...[1]];
+console.log(foo());
 
-export const test = "paths";
+export { foo };
